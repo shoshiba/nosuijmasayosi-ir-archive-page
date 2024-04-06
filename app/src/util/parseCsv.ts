@@ -1,7 +1,7 @@
 // utils/parseCsv.js
 import Papa from 'papaparse';
 
-export const parseCsv = async (path) => {
+export const parseCsv = async (path: string): Promise<any> => {
   const response = await fetch(path);
   const reader = response.body.getReader();
   const result = await reader.read(); // raw array
