@@ -102,6 +102,12 @@ export default function Home() {
           value={difficultyValue}
           onChange={handleChange}
           aria-label="basic tabs example"
+          sx={{
+            '& .MuiTab-root': { // すべてのTabコンポーネントに適用されます
+              color: 'white', // ここで好きな色を指定
+              
+            },
+          }}
         >
           <Tab label="☆9↓" {...a11yProps(0)} />
           <Tab label="☆10" {...a11yProps(1)} />
