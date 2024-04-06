@@ -40,6 +40,20 @@ function a11yProps(index: number) {
   };
 }
 
+
+const columnsScore = [
+  { Header: "JYUNI", accessor: "JYUNI" },
+  { Header: "PLAYER NAME", accessor: "PLAYER NAME" },
+  { Header: "RATE", accessor: "RATE" },
+  { Header: "RANK", accessor: "RANK" },
+  { Header: "RANK+", accessor: "RANK+" },
+  { Header: "NEXT", accessor: "NEXT" },
+  { Header: "LEFT", accessor: "LEFT" },
+  { Header: "RIGHT", accessor: "RIGHT" },
+  { Header: "FLIP", accessor: "FLIP" },
+  { Header: "Platform", accessor: "Platform" },
+];
+
 const columnsGrandMaster = [
   { Header: "JYUNI", accessor: "JYUNI" },
   { Header: "PLAYER NAME", accessor: "PLAYER NAME" },
@@ -54,6 +68,15 @@ const columnsGrandMaster = [
   { Header: "NEXT", accessor: "NEXT" },
 ];
 
+const csvFiles = [
+  '/csv/11/9_result.csv',
+  '/csv/11/10_result.csv',
+  '/csv/11/11_result.csv',
+  '/csv/11/12_result.csv',
+  '/csv/11/gm_result.csv',
+];
+
+
 export default function Home() {
   const [data, setData] = useState([]);
 
@@ -65,7 +88,7 @@ export default function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await parseCsv("/csv/gm_result.csv");
+      const result = await parseCsv(csvFiles[difficultyValue]);
       console.log(result);
       setData(result);
     };
@@ -88,16 +111,16 @@ export default function Home() {
         </Tabs>
       </Box>
       <CustomTabPanel value={difficultyValue} index={0}>
-        Item One
+        <DataTable columns={columnsScore} data={data} />
       </CustomTabPanel>
       <CustomTabPanel value={difficultyValue} index={1}>
-        Item Two
+        <DataTable columns={columnsScore} data={data} />
       </CustomTabPanel>
       <CustomTabPanel value={difficultyValue} index={2}>
-        Item Three
+        <DataTable columns={columnsScore} data={data} />
       </CustomTabPanel>
       <CustomTabPanel value={difficultyValue} index={3}>
-        Item Four
+        <DataTable columns={columnsScore} data={data} />
       </CustomTabPanel>
       <CustomTabPanel value={difficultyValue} index={4}>
         <DataTable columns={columnsGrandMaster} data={data} />
