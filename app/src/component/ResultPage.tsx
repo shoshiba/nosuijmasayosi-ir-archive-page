@@ -142,7 +142,7 @@ export default function ResultPage() {
         </Box>
         <Box>
           <DetailTournament
-          tournamentNumber={tournamentNumber.toString()}
+          tournamentNumber={tournamentNumber}
           hosi9Music={hosi9Music}
           hosi10Music={hosi10Music}
           hosi11Music={hosi11Music}
