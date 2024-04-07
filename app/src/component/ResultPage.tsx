@@ -2,11 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import { parseCsv } from "../util/parseCsv";
+import { generateCsvPath } from "../service/generateCsvPath";
 import DataTable from "./resultPage/DataTable";
 import DifficultyTabs from "./resultPage/DifficultyTabs";
 import { Box, Tabs, Tab } from "@mui/material";
-
+import Sidebar from "./common/Sidebar";
 import Typography from "@mui/material/Typography";
+
+
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -69,13 +72,35 @@ const csvFiles = [
   "/csv/11/gm_result.csv",
 ];
 
+const tournaments = [
+  '第1回',
+  '第2回',
+  '第3回',
+  '第4回',
+  '第5回',
+  '第6回',
+  '第7回',
+  '第8回',
+  '第8.5回',
+  '第9回',
+  '第10回',
+  '第11回'
+];
+
 export default function ResultPage() {
   const [data, setData] = useState([]);
   const [difficultyValue, setdifficultyValue] = React.useState(0);
+  const [tournamentNumber, setTournamentNumber] = useState(0);
+
+  const handleSelectTournament = (index: number) => {
+    setTournamentNumber(index);
+    // ここで選択された大会のデータを取得するロジックを追加
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
-      const result: any = await parseCsv(csvFiles[difficultyValue]);
+      const result: any = await parseCsv(generateCsvPath(tournamentNumber, difficultyValue));
       console.log(result);
       setData(result);
     };
@@ -84,6 +109,11 @@ export default function ResultPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <Box>
+        <Sidebar tournaments={tournaments} onSelect={handleSelectTournament}/>
+      </Box>
+      <Box>
+
       <DifficultyTabs
         difficultyValue={difficultyValue}
         handleChange={(event, newValue) => setdifficultyValue(newValue)}
@@ -103,6 +133,7 @@ export default function ResultPage() {
       <CustomTabPanel value={difficultyValue} index={4}>
         <DataTable columns={columnsGrandMaster} data={data} />
       </CustomTabPanel>
+      </Box>
     </main>
   );
 }
