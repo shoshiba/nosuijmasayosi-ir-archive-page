@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { parseCsv } from "../../util/parseCsv";
-import DataTable from "../DataTable";
+import { parseCsv } from "../util/parseCsv";
+import DataTable from "./resultPage/DataTable";
+import DifficultyTabs from "./resultPage/DifficultyTabs";
 import { Box, Tabs, Tab } from "@mui/material";
 
 import Typography from "@mui/material/Typography";
@@ -33,14 +34,6 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
-
-
 const columnsScore = [
   { Header: "JYUNI", accessor: "JYUNI" },
   { Header: "PLAYER NAME", accessor: "PLAYER NAME" },
@@ -69,26 +62,20 @@ const columnsGrandMaster = [
 ];
 
 const csvFiles = [
-  '/csv/11/9_result.csv',
-  '/csv/11/10_result.csv',
-  '/csv/11/11_result.csv',
-  '/csv/11/12_result.csv',
-  '/csv/11/gm_result.csv',
+  "/csv/11/9_result.csv",
+  "/csv/11/10_result.csv",
+  "/csv/11/11_result.csv",
+  "/csv/11/12_result.csv",
+  "/csv/11/gm_result.csv",
 ];
-
 
 export default function ResultPage() {
   const [data, setData] = useState([]);
-
   const [difficultyValue, setdifficultyValue] = React.useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setdifficultyValue(newValue);
-  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const result : any= await parseCsv(csvFiles[difficultyValue]);
+      const result: any = await parseCsv(csvFiles[difficultyValue]);
       console.log(result);
       setData(result);
     };
@@ -97,25 +84,10 @@ export default function ResultPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={difficultyValue}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-          sx={{
-            '& .MuiTab-root': { // すべてのTabコンポーネントに適用されます
-              color: 'white', // ここで好きな色を指定
-              
-            },
-          }}
-        >
-          <Tab label="☆9↓" {...a11yProps(0)} />
-          <Tab label="☆10" {...a11yProps(1)} />
-          <Tab label="☆11" {...a11yProps(2)} />
-          <Tab label="☆12" {...a11yProps(3)} />
-          <Tab label="GRANDMASTER" {...a11yProps(4)} />
-        </Tabs>
-      </Box>
+      <DifficultyTabs
+        difficultyValue={difficultyValue}
+        handleChange={(event, newValue) => setdifficultyValue(newValue)}
+      />
       <CustomTabPanel value={difficultyValue} index={0}>
         <DataTable columns={columnsScore} data={data} />
       </CustomTabPanel>

@@ -1,17 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { parseCsv } from "./src/util/parseCsv";
-import { Box, Tabs, Tab } from "@mui/material";
-import ResultPage from "./src/component/resultPage/ResultPage";
-
-import Typography from "@mui/material/Typography";
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
+import React from "react";
+import ResultPage from "./src/component/ResultPage";
 
 export default function Home() {
 
