@@ -5,11 +5,10 @@ import { parseCsv } from "../util/parseCsv";
 import { generateCsvPath } from "../service/generateCsvPath";
 import DataTable from "./resultPage/DataTable";
 import DifficultyTabs from "./resultPage/DifficultyTabs";
-import { Box, Tabs, Tab } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import Sidebar from "./common/Sidebar";
 import Typography from "@mui/material/Typography";
-
-
+import DetailTournament from "./resultPage/DetailTournament";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -38,8 +37,9 @@ function CustomTabPanel(props: TabPanelProps) {
 }
 
 const columnsScore = [
-  { Header: "JYUNI", accessor: "JYUNI" },
+  { Header: "順位", accessor: "JYUNI" },
   { Header: "PLAYER NAME", accessor: "PLAYER NAME" },
+  { Header: "SCORE", accessor: "SCORE" },
   { Header: "RATE", accessor: "RATE" },
   { Header: "RANK", accessor: "RANK" },
   { Header: "RANK+", accessor: "RANK+" },
@@ -51,7 +51,7 @@ const columnsScore = [
 ];
 
 const columnsGrandMaster = [
-  { Header: "JYUNI", accessor: "JYUNI" },
+  { Header: "順位", accessor: "JYUNI" },
   { Header: "PLAYER NAME", accessor: "PLAYER NAME" },
   { Header: "☆9↓", accessor: "☆9↓" },
   { Header: "☆10", accessor: "☆10" },
@@ -73,18 +73,18 @@ const csvFiles = [
 ];
 
 const tournaments = [
-  '第1回',
-  '第2回',
-  '第3回',
-  '第4回',
-  '第5回',
-  '第6回',
-  '第7回',
-  '第8回',
-  '第8.5回',
-  '第9回',
-  '第10回',
-  '第11回'
+  "第1回",
+  "第2回",
+  "第3回",
+  "第4回",
+  "第5回",
+  "第6回",
+  "第7回",
+  "第8回",
+  "第8.5回",
+  "第9回",
+  "第10回",
+  "第11回",
 ];
 
 export default function ResultPage() {
@@ -97,10 +97,11 @@ export default function ResultPage() {
     // ここで選択された大会のデータを取得するロジックを追加
   };
 
-
   useEffect(() => {
     const fetchData = async () => {
-      const result: any = await parseCsv(generateCsvPath(tournamentNumber, difficultyValue));
+      const result: any = await parseCsv(
+        generateCsvPath(tournamentNumber, difficultyValue)
+      );
       console.log(result);
       setData(result);
     };
@@ -109,31 +110,36 @@ export default function ResultPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Box>
-        <Sidebar tournaments={tournaments} onSelect={handleSelectTournament}/>
-      </Box>
-      <Box>
-
-      <DifficultyTabs
-        difficultyValue={difficultyValue}
-        handleChange={(event, newValue) => setdifficultyValue(newValue)}
-      />
-      <CustomTabPanel value={difficultyValue} index={0}>
-        <DataTable columns={columnsScore} data={data} />
-      </CustomTabPanel>
-      <CustomTabPanel value={difficultyValue} index={1}>
-        <DataTable columns={columnsScore} data={data} />
-      </CustomTabPanel>
-      <CustomTabPanel value={difficultyValue} index={2}>
-        <DataTable columns={columnsScore} data={data} />
-      </CustomTabPanel>
-      <CustomTabPanel value={difficultyValue} index={3}>
-        <DataTable columns={columnsScore} data={data} />
-      </CustomTabPanel>
-      <CustomTabPanel value={difficultyValue} index={4}>
-        <DataTable columns={columnsGrandMaster} data={data} />
-      </CustomTabPanel>
-      </Box>
+      <Container sx={{ display: "flex", flexDirection: "row" }}>
+        <Box>
+          <Sidebar
+            tournaments={tournaments}
+            onSelect={handleSelectTournament}
+          />
+        </Box>
+        <Box>
+          <DetailTournament />
+          <DifficultyTabs
+            difficultyValue={difficultyValue}
+            handleChange={(event, newValue) => setdifficultyValue(newValue)}
+          />
+          <CustomTabPanel value={difficultyValue} index={0}>
+            <DataTable columns={columnsScore} data={data} />
+          </CustomTabPanel>
+          <CustomTabPanel value={difficultyValue} index={1}>
+            <DataTable columns={columnsScore} data={data} />
+          </CustomTabPanel>
+          <CustomTabPanel value={difficultyValue} index={2}>
+            <DataTable columns={columnsScore} data={data} />
+          </CustomTabPanel>
+          <CustomTabPanel value={difficultyValue} index={3}>
+            <DataTable columns={columnsScore} data={data} />
+          </CustomTabPanel>
+          <CustomTabPanel value={difficultyValue} index={4}>
+            <DataTable columns={columnsGrandMaster} data={data} />
+          </CustomTabPanel>
+        </Box>
+      </Container>
     </main>
   );
 }

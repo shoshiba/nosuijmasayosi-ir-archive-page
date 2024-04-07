@@ -15,14 +15,14 @@ const DataTable = ({ columns, data }:any) => {
   });
 
   return (
-    <table {...getTableProps()}>
+    <table {...getTableProps()} className='divide-y text-left table-auto'>
       <thead>
         {headerGroups.map(headerGroup => (
           // eslint-disable-next-line react/jsx-key
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
               // eslint-disable-next-line react/jsx-key
-              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+              <th {...column.getHeaderProps()} className='px-3'>{column.render('Header')}</th>
             ))}
           </tr>
         ))}
@@ -35,7 +35,7 @@ const DataTable = ({ columns, data }:any) => {
             <tr {...row.getRowProps()}>
               {row.cells.map(cell => {
                 // eslint-disable-next-line react/jsx-key
-                return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
+                return <td {...cell.getCellProps()} className='px-3 py-1'>{cell.render('Cell')}</td>;
               })}
             </tr>
           );
