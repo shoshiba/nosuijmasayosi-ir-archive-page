@@ -16,6 +16,7 @@ interface TabPanelProps {
   value: number;
 }
 
+
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
@@ -64,14 +65,6 @@ const columnsGrandMaster = [
   { Header: "NEXT", accessor: "NEXT" },
 ];
 
-const csvFiles = [
-  "/csv/11/9_result.csv",
-  "/csv/11/10_result.csv",
-  "/csv/11/11_result.csv",
-  "/csv/11/12_result.csv",
-  "/csv/11/gm_result.csv",
-];
-
 const tournaments = [
   "第1回",
   "第2回",
@@ -89,24 +82,54 @@ const tournaments = [
 
 export default function ResultPage() {
   const [data, setData] = useState([]);
-  const [difficultyValue, setdifficultyValue] = React.useState(0);
-  const [tournamentNumber, setTournamentNumber] = useState(0);
+  const [musicData, setMusicData] = useState([]);
+  const [difficultyValue, setdifficultyValue] = useState(0);
+  const [tournamentNumber, setTournamentNumber] = useState(11);
+  const [hosi9Music, setHosi9Music] = useState("test");
+  const [hosi10Music, setHosi10Music] = useState("test");
+  const [hosi11Music, setHosi11Music] = useState("test");
+  const [hosi12Music, setHosi12Music] = useState("test");
 
-  const handleSelectTournament = (index: number) => {
-    setTournamentNumber(index);
-    // ここで選択された大会のデータを取得するロジックを追加
+  const handleSelectTournament = async (index: number) => {
+      setTournamentNumber(index);
+    }
+  useEffect(() => {
+      // tournamentNumberが更新された後に実行される
+  const musicName9 = musicData.find(item => item["tournamentNumber"] === tournamentNumber.toString() && item["difficulty"] === "0")?.["musicName"] || '';
+  const musicName10 = musicData.find(item => item["tournamentNumber"] === tournamentNumber.toString() && item["difficulty"] === "1")?.["musicName"] || '';
+  const musicName11 = musicData.find(item => item["tournamentNumber"] === tournamentNumber.toString() && item["difficulty"] === "2")?.["musicName"] || '';
+  const musicName12 = musicData.find(item => item["tournamentNumber"] === tournamentNumber.toString() && item["difficulty"] === "3")?.["musicName"] || '';
+
+  setHosi9Music(musicName9);
+  setHosi10Music(musicName10);
+  setHosi11Music(musicName11);
+  setHosi12Music(musicName12);
+
+  const fetchData = async () => {
+    const result: any = await parseCsv(
+      generateCsvPath(tournamentNumber, difficultyValue)
+    );
+    setData(result);
   };
+  fetchData();
+  }, [tournamentNumber, difficultyValue])
+
 
   useEffect(() => {
     const fetchData = async () => {
       const result: any = await parseCsv(
         generateCsvPath(tournamentNumber, difficultyValue)
       );
-      console.log(result);
       setData(result);
+
+      const detailResult:any = await parseCsv('/csv/musicMaster.csv')
+      
+      setMusicData(detailResult)
     };
     fetchData();
-  });
+  },[]);
+  
+  //setHosi9Music(musicData.find(item => item["tournamentNumber"] === "10" && item["difficulty"] === "0"))
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -118,7 +141,13 @@ export default function ResultPage() {
           />
         </Box>
         <Box>
-          <DetailTournament />
+          <DetailTournament
+          tournamentNumber={tournamentNumber}
+          hosi9Music={hosi9Music}
+          hosi10Music={hosi10Music}
+          hosi11Music={hosi11Music}
+          hosi12Music={hosi12Music}
+          />
           <DifficultyTabs
             difficultyValue={difficultyValue}
             handleChange={(event, newValue) => setdifficultyValue(newValue)}
