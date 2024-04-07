@@ -14,7 +14,7 @@ const Sidebar: React.FC<SidebarProps> = ({ tournaments, onSelect }) => {
         <ListItem
         key={index}
         className={`${activeItemId===index ? `bg-blue-500` : ''}`}
-        button key={index} onClick={() => {onSelect(index); setActiveItemId(index)}}>
+        button onClick={() => {onSelect(index); setActiveItemId(index)}}>
           <ListItemText primary={tournament} />
         </ListItem>
       ))}
